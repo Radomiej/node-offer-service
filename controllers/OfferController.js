@@ -16,6 +16,6 @@ exports.register = function (server) {
     server.route({
         method: 'GET',
         path: '/offers/nearest',
-        handler: OfferService.getNearest
+        handler: OfferService.findNearest
     });
 };

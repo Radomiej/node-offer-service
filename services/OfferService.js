@@ -1,4 +1,3 @@
-
 const OfferModel = require('../models/OfferModel');
 
 exports.getOne = async function (request, h) {
@@ -19,16 +18,16 @@ exports.getAll = async function (request, h) {
     }
 };
 
-exports.findNear = function (request, reply) {
-    let latitude = request.params['lat'];
-    let longitude = request.params['lon'];
+exports.findNearest = async function (request, reply) {
+    let latitude = request.query.lat;
+    let longitude = request.query.lon;
     // Max distance to search
     let maxDistance = 1000;
-    if(request.params['distance'] !== 'undefined'){
-        maxDistance = request.params['distance']
+    if (request.query.distance !== 'undefined') {
+        maxDistance = request.query.distance;
     }
 
-    OfferModel.find({
+    let findQuery = {
         location: {
             $near: {
                 $maxDistance: maxDistance,
@@ -38,9 +37,18 @@ exports.findNear = function (request, reply) {
                 }
             }
         }
-    }).exec(function (err, offers) {
-        return reply.header('Content-Type', 'application/json').response(offers);
-    });
+    };
+
+    console.log("distance: " + maxDistance);
+
+    try {
+        let offers = await OfferModel.find(findQuery).exec();
+        return reply.response(offers);
+    } catch (error) {
+        return reply.response(error).code(500);
+    }
+
+
 };
 
 
@@ -51,32 +59,28 @@ exports.count = function () {
     });
 };
 
-exports.addOne = function (userForm) {
-    const user = new OfferModel();
+exports.addOne = function (offerForm) {
+    const offer = new OfferModel();
 
-    user._id = null;
-    user.login = userForm.login;
-    user.password = userForm.password;
-    user.basic = makeBaseAuth(user.login, user.password);
-    user.roles = userForm.roles;
+    offer._id = null;
+    offer.owner = offerForm.owner;
+    offer.created = Date.now();
+    offer.updated = Date.now();
+    offer.title = offerForm.title;
+    offer.header = offerForm.header;
+    offer.content = offerForm.content;
+    offer.location = offerForm.location;
 
-    console.log('basic: ' + user.basic);
 
-    user.save(function (err) {
+    console.log('add offer: ' + offer);
+
+    offer.save(function (err) {
 
 
         if (err) {
             console.error(err);
             return false;
         }
-        return user;
+        return offer;
     });
 };
-
-function makeBaseAuth(user, password) {
-    let tok = user + ':' + password;
-
-    let buff = Buffer.from(tok);
-    let hash = buff.toString('base64');
-    return "Basic " + hash;
-}

@@ -18,10 +18,27 @@ exports.init = function () {
 
 function addDemoUsers() {
     let firstOffer = {
-        login: "admin",
-        password: "admin",
-        roles: ['admin', 'user', 'manager']
+        owner: "admin",
+        title: "Offer Number One",
+        header: "This is HEADER!",
+        content: "THIS IS CONTENT!",
+        location: {
+            type: 'Point',
+            coordinates: [16, 52]
+        }
+    };
+
+    let secoundOffer = {
+        owner: "admin",
+        title: "Offer Number Two",
+        header: "This is HEADER!",
+        content: "THIS IS CONTENT!",
+        location: {
+            type: 'Point',
+            coordinates: [52, 16]
+        }
     };
 
     OfferService.addOne(firstOffer);
+    OfferService.addOne(secoundOffer);
 }

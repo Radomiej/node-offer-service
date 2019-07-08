@@ -34,7 +34,7 @@ const initMongo = function(){
     //MongodDB
     let mongoDbHost = process.env.MONGODB_HOST || 'localhost';
     let mongoDbPort = process.env.MONGODB_PORT || '27017';
-    let mongoDbDatabase = process.env.MONGODB_DATABASE || 'users-dev';
+    let mongoDbDatabase = process.env.MONGODB_DATABASE || 'offers-dev';
 
     // MongoDB: Setup new features
     mongoose.set('useNewUrlParser', true);

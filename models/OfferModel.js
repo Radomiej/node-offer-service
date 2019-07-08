@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const pointSchema = new mongoose.Schema({
+const PointSchema = new mongoose.Schema({
     _id: {type: Schema.Types.ObjectId, required: false},
     type: {type: String, enum: ['Point'], required: true},
     coordinates: {type: [Number], required: true}
@@ -12,10 +12,10 @@ let OfferSchema = new Schema({
     owner: {type: String, required: true},
     created: {type: String, required: true},
     updated: {type: String, required: true},
-    title: {type: [String], required: true},
+    title: {type: String, required: true},
     header: {type: String, required: false},
     content: {type: String, required: false},
-    location: {type: pointSchema, required: true}
+    location: {type: PointSchema, required: true}
 }, {collection: 'offers'});
 
 OfferSchema.set('toJSON', {
